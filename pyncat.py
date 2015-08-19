@@ -15,6 +15,7 @@ def parse_cl():
     parser.add_argument('-p', '--port', required=True, type=int,
                         help='Listen port')
     args = parser.parse_args()
+
     return args
 
 
@@ -25,7 +26,7 @@ def recv_timeout(the_socket, timeout=1):
     data = ''
     begin = time.time()
 
-    while 1:
+    while True:
         #if you got some data, then break after wait sec
         if total_data and time.time() - begin > timeout:
             break
@@ -42,7 +43,7 @@ def recv_timeout(the_socket, timeout=1):
         except socket.error:
             pass
 
-    return ''.join(total_data)[:-2]
+    return ''.join(total_data)[:-3]
 
 
 def server(host, port):
