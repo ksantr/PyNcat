@@ -14,9 +14,8 @@ def parse_cl():
                         help='Listen address for incoming connections')
     parser.add_argument('-p', '--port', required=True, type=int,
                         help='Listen port')
-    args = parser.parse_args()
 
-    return args
+    return parser.parse_args()
 
 
 def recv_timeout(the_socket, timeout=1):
@@ -27,10 +26,10 @@ def recv_timeout(the_socket, timeout=1):
     begin = time.time()
 
     while True:
-        #if you got some data, then break after wait sec
+        # if you got some data, then break after wait sec
         if total_data and time.time() - begin > timeout:
             break
-        #if you got no data at all, wait a little longer
+        # if you got no data at all, wait a little longer
         elif time.time() - begin > timeout * 2:
             break
         try:
