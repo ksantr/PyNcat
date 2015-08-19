@@ -81,7 +81,7 @@ def console(conn):
 def execute(conn, send_data):
     """ Execute(send) single command """
     if send_data.strip():
-        conn.sendall(send_data + '\n')
+        conn.sendall('{}\n'.format(send_data).encode('utf-8'))
         # get response from client
         print(recv_timeout(conn))
 
