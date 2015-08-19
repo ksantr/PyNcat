@@ -1,4 +1,5 @@
-# PyNcat
+# PyNcat - netcat implementation in Python. 
+Written on pure sockets.
 ##Usage:
     pyncat.py [-h] [-e EXECUTE] [-c] -l LISTEN -p PORT
 * command shell
