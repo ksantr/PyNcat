@@ -43,8 +43,9 @@ def recv_timeout(the_socket, timeout=1):
                 begin = time.time()
             else:
                 time.sleep(0.1)
-        except socket.error:
-            pass
+        except socket.error as e:
+            if not e.errno == 11:
+                raise
 
     return ''.join(total_data)
 
