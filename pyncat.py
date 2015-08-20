@@ -1,7 +1,11 @@
+from __future__ import print_function
 import socket
 import sys
 import time
 from argparse import ArgumentParser
+
+if sys.version_info.major > 2:
+    raw_input = input
 
 
 def parse_cl():
@@ -33,16 +37,16 @@ def recv_timeout(the_socket, timeout=1):
         elif time.time() - begin > timeout * 2:
             break
         try:
-            data = the_socket.recv(1024) # 8192
+            data = the_socket.recv(1024)  # 8192
             if data:
-                total_data.append(data)
+                total_data.append(data.decode('utf-8'))
                 begin = time.time()
             else:
                 time.sleep(0.1)
         except socket.error:
             pass
 
-    return ''.join(total_data)[:-3]
+    return ''.join(total_data)
 
 
 def server(host, port):
@@ -52,7 +56,7 @@ def server(host, port):
     s.bind((host, port))
     s.listen(5)
     conn, addr = s.accept()
-    print 'Connected by', addr
+    print('Connected by', addr)
 
     return conn
 
@@ -65,11 +69,11 @@ def console(conn):
         if send_data == 'exit' or send_data == 'q':
             break
         if send_data:
-            conn.sendall(send_data + '\n')
+            conn.sendall('{}\n'.format(send_data).encode('utf-8'))
         else:
             continue
         # get response from client
-        print recv_timeout(conn)
+        print(recv_timeout(conn))
 
     conn.close()
 
@@ -77,9 +81,9 @@ def console(conn):
 def execute(conn, send_data):
     """ Execute(send) single command """
     if send_data.strip():
-        conn.sendall(send_data + '\n')
+        conn.sendall('{}\n'.format(send_data).encode('utf-8'))
         # get response from client
-        print recv_timeout(conn)
+        print(recv_timeout(conn))
 
     conn.close()
 
@@ -88,12 +92,18 @@ if __name__ == '__main__':
     args = parse_cl()
 
     if not args.execute and not args.cmd:
-        print '[!] Not enough arguments, read help >python %s --help' % sys.argv[0]
+        print('[!] Not enough arguments, read help >python {} --help'.format(
+            sys.argv[0]
+        ))
         sys.exit()
 
     client = server(args.listen, args.port)
 
-    if args.cmd:
-        console(client)
-    else:
-        execute(client, args.execute[0])
+    try:
+        if args.cmd:
+            console(client)
+        else:
+            execute(client, args.execute[0])
+    except KeyboardInterrupt:
+        print('\nUser cancelled.')
+        sys.exit(1)
