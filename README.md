@@ -2,7 +2,7 @@
 Written on pure sockets.
 ##Usage:
     pyncat.py [-h] [-e EXECUTE] [-c] -l LISTEN -p PORT
-* command shell
+* run command shell
 
     python pyncat.py -l 127.0.0.1 -p 9900 -c
 
