@@ -19,7 +19,7 @@ def parse_cl():
     parser.add_argument('-p', '--port', required=True, type=int,
                         help='Listen port')
 
-    return parser.parse_args()
+    return parser
 
 
 def recv_timeout(the_socket, timeout=1):
@@ -90,21 +90,23 @@ def execute(conn, send_data):
 
 
 if __name__ == '__main__':
-    args = parse_cl()
+    parser = parse_cl()
+    args = parser.parse_args()
 
     if not args.execute and not args.cmd:
-        print('[!] Not enough arguments, read help >python {} --help'.format(
-            sys.argv[0]
-        ))
+        print('[!] Not enough arguments')
+        parser.print_help()
         sys.exit()
 
-    client = server(args.listen, args.port)
-
     try:
+        # Run server
+        client = server(args.listen, args.port)
+
+        # Run shell
         if args.cmd:
             console(client)
         else:
+            # Execute a single command
             execute(client, args.execute[0])
     except KeyboardInterrupt:
-        print('\nUser cancelled.')
-        sys.exit(1)
+        sys.exit('\nUser cancelled')
