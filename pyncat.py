@@ -1,12 +1,12 @@
-from __future__ import print_function
 import socket
 import sys
 import time
 from argparse import ArgumentParser
+from __future__ import print_function
+
 
 if sys.version_info.major > 2:
     raw_input = input
-
 
 def parse_cl():
     parser = ArgumentParser(description='Python netcat')
@@ -20,7 +20,6 @@ def parse_cl():
                         help='Listen port')
 
     return parser
-
 
 def recv_timeout(the_socket, timeout=1):
     """ Socket read method """
@@ -49,7 +48,6 @@ def recv_timeout(the_socket, timeout=1):
 
     return ''.join(total_data)
 
-
 def server(host, port):
     """ Server Method """
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -60,7 +58,6 @@ def server(host, port):
     print('Connected by', addr)
 
     return conn
-
 
 def console(conn):
     """ Run cmd shell """
@@ -77,7 +74,6 @@ def console(conn):
         print(recv_timeout(conn))
 
     conn.close()
-
 
 def execute(conn, send_data):
     """ Execute(send) single command """
