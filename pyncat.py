@@ -2,7 +2,6 @@ import socket
 import sys
 import time
 from argparse import ArgumentParser
-from __future__ import print_function
 
 
 if sys.version_info.major > 2:
